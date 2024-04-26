@@ -91,8 +91,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed
-vim.g.have_nerd_font = false
-
+vim.g.have_nerd_font = true
+vim.scriptencoding = 'utf-8'
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -330,6 +330,7 @@ require('lazy').setup({
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'ryanoasis/vim-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -538,6 +539,7 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       require('lspconfig').gdscript.setup(capabilities)
+      --require('lspconfig').csharp_ls.setup {}
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -859,6 +861,18 @@ require('lazy').setup({
     end,
   },
   { 'habamax/vim-godot', event = 'VimEnter' },
+  { 'ryanoasis/vim-devicons', event = 'VimEnter' },
+  { 'nvim-tree/nvim-web-devicons', event = 'VimEnter' },
+  --[[{]]
+  --[['preservim/nerdtree',]]
+  --[[vim.keymap.set('n', '<C-n>', ':NERDTreeToggle<CR>', { desc = 'NERDTree Toggle' }),]]
+  --[[vim.keymap.set('n', '<C-f>', ':NERDTreeFind<CR>', { desc = 'NERDTree Find' }),]]
+  --[[{ 'ryanoasis/vim-devicons' },]]
+  --[[{ 'nvim-tree/nvim-web-devicons' },]]
+  --[[},]]
+  { 'nvim-tree/nvim-tree.lua', vim.keymap.set('n', '<C-a>', '<cmd>NvimTreeToggle<CR>'), vim.keymap.set('n', 'C-t', '<cmd>NvimTreeChangeRootToParent<CR>') },
+  --{ 'OmniSharp/omnisharp-vim' },
+  { 'puremourning/vimspector' },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -869,6 +883,7 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.nvim-tree',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
 

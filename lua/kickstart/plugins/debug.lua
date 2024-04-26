@@ -64,6 +64,21 @@ return {
         launch_scene = false,
       },
     }
+    dap.adapters.coreclr = {
+      type = 'executable',
+      command = 'C:/Users/wired/AppData/Local/nvim/lua/kickstart/plugins/netcoredbg/netcoredbg',
+      args = {'--interpreter=vscode'}
+    }
+    dap.configurations.cs = {
+      {
+        type = "coreclr",
+        name = "launch - netcoredbg",
+        request = "launch",
+        program = function()
+            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+        end,
+      },
+    }
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
