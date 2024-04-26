@@ -192,6 +192,7 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
 vim.api.nvim_set_keymap('n', '<A-Up>', 'ddkP', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<A-Down>', 'ddp', { noremap = true, silent = true })
@@ -307,6 +308,7 @@ require('lazy').setup({
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
   { 'preservim/nerdcommenter' },
+  { 'Tastyep/structlog.nvim' },
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -430,6 +432,10 @@ require('lazy').setup({
       { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
+      require('mason').setup()
+      require('mason-lspconfig').setup {
+        ensure_installed = { 'lua_ls', 'omnisharp' },
+      }
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -539,6 +545,14 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       require('lspconfig').gdscript.setup(capabilities)
+      require('lspconfig').omnisharp.setup {
+        capabilities = capabilities,
+        enable_roslyn_analysers = true,
+        enable_import_completion = true,
+        organize_imports_on_format = true,
+        enable_decompilation_support = true,
+        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+      }
       --require('lspconfig').csharp_ls.setup {}
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -834,7 +848,21 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'c_sharp', 'cpp', 'gdscript', 'godot_resource', 'gdshader', 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'c_sharp',
+        'cpp',
+        'gdscript',
+        'godot_resource',
+        'gdshader',
+        'bash',
+        'c',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'vim',
+        'vimdoc',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

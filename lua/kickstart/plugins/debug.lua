@@ -5,7 +5,6 @@
 -- Primarily focused on configuring the debugger for Go, but can
 -- be extended to other languages as well. That's why it's called
 -- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
@@ -66,17 +65,61 @@ return {
     }
     dap.adapters.coreclr = {
       type = 'executable',
-      command = 'C:/Users/wired/AppData/Local/nvim/lua/kickstart/plugins/netcoredbg/netcoredbg',
+      command = 'C:/Users/homex/AppData/Local/nvim/lua/kickstart/plugins/netcoredbg/netcoredbg',
       args = {'--interpreter=vscode'}
     }
+
+
+    local function getHighestVersionDirectory(dir)
+      local command = 'dir /B ' .. dir -- For Windows, use 'dir /B ' .. dir instead
+      local max_version, max_dir = -1, ''
+      local p = io.popen(command)
+      local lines = p:lines()
+      for dirname in lines do
+        local version = tonumber(dirname:match('net(%d+%.%d+)'))
+        if version and version > max_version then
+          max_version = version
+          max_dir = dirname
+        end
+      end
+      if p ~= nil then
+        p:close()
+      end
+    
+      return max_dir
+    end
+
+    homex_config = {
+      debug_dllPath = nil
+    }
+
     dap.configurations.cs = {
       {
         type = "coreclr",
         name = "launch - netcoredbg",
         request = "launch",
         program = function()
-            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+          local path = vim.fn.getcwd()
+          local sep = path:match('[/\\]') -- Get the path separator used (either / or \)
+          local last_dir = path:match('([^' .. sep .. ']+' .. sep .. '?)$')
+          local project_name = last_dir:sub(1, -1) -- Remove the trailing separator if it exists
+          local version_directory = path .. "\\bin\\Debug"
+          local latest_version = getHighestVersionDirectory(version_directory);
+          -- logger:info('Hieghest version: ' .. latest_version)
+          local executable_path = version_directory .. "\\" .. latest_version .. "\\" .. project_name .. ".dll"
+          -- local tokens = string.gmatch(path, "\\")
+          -- local project_name = tokens[#(tokens) - 1] .. "\\"
+          if (homex_config.debug_dllPath ~= nill) then
+            executable_path = homex_config.debug_dllPath
+          end
+    
+          local result = vim.fn.input('Path to dll: ', executable_path, 'file')
+          homex_config.debug_dllPath = result
+          -- logger:info('Result: ' .. result)
+          return result
         end,
+        -- env = {},
+        -- cwd = ""
       },
     }
 
