@@ -170,6 +170,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+vim.api.nvim_set_keymap('n', '<leader><Tab><Tab>', ':tabnew<CR>', { noremap = true, silent = true, desc = 'Open new tab' })
+vim.api.nvim_set_keymap('n', '<leader><Tab><Right>', ':tabnext<CR>', { noremap = true, silent = true, desc = 'Go to next tab' })
+vim.api.nvim_set_keymap('n', '<leader><Tab><Left>', ':tabprevious<CR>', { noremap = true, silent = true, desc = 'Go to previous tab' })
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -355,7 +358,6 @@ require('lazy').setup({
       -- do as well as how to actually do it!
 
       -- [[ Configure Telescope ]]
-      -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -900,7 +902,19 @@ require('lazy').setup({
   --[[},]]
   { 'nvim-tree/nvim-tree.lua', vim.keymap.set('n', '<C-a>', '<cmd>NvimTreeToggle<CR>'), vim.keymap.set('n', 'C-t', '<cmd>NvimTreeChangeRootToParent<CR>') },
   --{ 'OmniSharp/omnisharp-vim' },
-  { 'puremourning/vimspector' },
+  --{ 'puremourning/vimspector' },
+  -- with lazy.nvim
+  {
+    'LintaoAmons/bookmarks.nvim',
+    dependencies = {
+      { 'stevearc/dressing.nvim' }, -- optional: to have the same UI shown in the GIF
+    },
+    vim.keymap.set({ 'n' }, '<leader>mm', '<cmd>BookmarksMark<cr>', { desc = 'Mark current line into active BookmarkList.' }),
+    vim.keymap.set({ 'n' }, '<leader>mt', '<cmd>BookmarksGoto<cr>', { desc = 'Go to bookmark at current active BookmarkList' }),
+    vim.keymap.set({ 'n' }, '<leader>mc', '<cmd>BookmarksCommands<cr>', { desc = 'Find and trigger a bookmark command.' }),
+    vim.keymap.set({ 'n' }, '<leader>mr', '<cmd>BookmarksGotoRecent<cr>', { desc = 'Go to latest visited/created Bookmark' }),
+    vim.keymap.set({ 'n' }, '<leader>ma', '<cmd>BookmarksCommands<cr> | <cmd>BookmarksGetAll<cr>', { desc = 'See all bookmarks' }),
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
