@@ -65,7 +65,7 @@ return {
     }
     dap.adapters.coreclr = {
       type = 'executable',
-      command = 'C:/Users/homex/AppData/Local/nvim/lua/kickstart/plugins/netcoredbg/netcoredbg',
+      command = 'C:/Users/wired/AppData/Local/nvim/lua/kickstart/plugins/netcoredbg/netcoredbg',
       args = {'--interpreter=vscode'}
     }
 
