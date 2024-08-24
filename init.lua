@@ -178,6 +178,8 @@ vim.api.nvim_set_keymap('n', '<leader><Tab><Left>', ':tabprevious<CR>', { norema
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
 --
+vim.cmd 'language en_US'
+
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -226,7 +228,9 @@ vim.opt.rtp:prepend(lazypath)
 local gdproject = io.open(vim.fn.getcwd() .. '/project.godot', 'r')
 if gdproject then
   io.close(gdproject)
-  vim.fn.serverstart '127.0.0.1:55432'
+  if not vim.loop.fs_stat '127.0.0.1:55432' then
+    vim.fn.serverstart '127.0.0.1:55432'
+  end
 end
 -- [[ Configure and install plugins ]]
 --

@@ -54,7 +54,7 @@ return {
       port = "${port}",
       executable = {
         -- CHANGE THIS to your path!
-        command = 'C:/Users/homex/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/adapter/codelldb.exe',
+        command = 'C:/Users/wired/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/adapter/codelldb.exe',
         args = {"--port", "${port}"},
     
         -- On windows you may have to uncomment this:
