@@ -198,7 +198,7 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
+--vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
 vim.api.nvim_set_keymap('n', '<A-Up>', 'ddkP', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<A-Down>', 'ddp', { noremap = true, silent = true })
@@ -228,7 +228,7 @@ vim.opt.rtp:prepend(lazypath)
 local gdproject = io.open(vim.fn.getcwd() .. '/project.godot', 'r')
 if gdproject then
   io.close(gdproject)
-  if not vim.loop.fs_stat '127.0.0.1:55432' then
+  if not vim.loop.fs_stat '127.0.0.1:55432' and vim.lsp.get_clients { name = 'Godot' } == 0 then
     vim.fn.serverstart '127.0.0.1:55432'
   end
 end
@@ -295,6 +295,9 @@ require('lazy').setup({
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    opts = {
+      notify = false,
+    },
     config = function() -- This is the function that runs, AFTER loading
       require('which-key').setup()
 
@@ -554,7 +557,8 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       require('nvim-lsp-installer').setup {}
-      require('lspconfig').gdscript.setup(capabilities)
+      --require('lspconfig').gdscript.setup {}
+      --require('lspconfig').gdscript.setup(capabilities)
       require('lspconfig').omnisharp.setup {
         capabilities = capabilities,
         enable_roslyn_analysers = true,
@@ -728,7 +732,8 @@ require('lazy').setup({
             luasnip.lsp_expand(args.body)
           end,
         },
-        completion = { completeopt = 'menu,menuone,noinsert' },
+        -- completion = { completeopt = 'menu,menuone,noinsert,noselect' },
+        completion = { completeopt = 'noselect' },
 
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
@@ -914,7 +919,7 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-  { 'habamax/vim-godot', event = 'VimEnter' },
+  --{ 'habamax/vim-godot', event = 'VimEnter' },
   { 'ryanoasis/vim-devicons', event = 'VimEnter' },
   { 'nvim-tree/nvim-web-devicons', event = 'VimEnter' },
   --[[{]]
@@ -928,18 +933,18 @@ require('lazy').setup({
   --{ 'OmniSharp/omnisharp-vim' },
   --{ 'puremourning/vimspector' },
   -- with lazy.nvim
-  {
-    'LintaoAmons/bookmarks.nvim',
-    dependencies = {
-      { 'stevearc/dressing.nvim' }, -- optional: to have the same UI shown in the GIF
-    },
-    vim.keymap.set({ 'n' }, '<leader>mm', '<cmd>BookmarksMark<cr>', { desc = 'Mark current line into active BookmarkList.' }),
-    vim.keymap.set({ 'n' }, '<leader>mt', '<cmd>BookmarksGoto<cr>', { desc = 'Go to bookmark at current active BookmarkList' }),
-    vim.keymap.set({ 'n' }, '<leader>mc', '<cmd>BookmarksCommands<cr>', { desc = 'Find and trigger a bookmark command.' }),
-    vim.keymap.set({ 'n' }, '<leader>mr', '<cmd>BookmarksGotoRecent<cr>', { desc = 'Go to latest visited/created Bookmark' }),
-    vim.keymap.set({ 'n' }, '<leader>ma', '<cmd>BookmarksCommands<cr> | <cmd>BookmarksGetAll<cr>', { desc = 'See all bookmarks' }),
-  },
-  -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
+  --[[  {]]
+  --[['LintaoAmons/bookmarks.nvim',]]
+  --[[dependencies = {]]
+  --[[{ 'stevearc/dressing.nvim' }, -- optional: to have the same UI shown in the GIF]]
+  --[[},]]
+  --[[vim.keymap.set({ 'n' }, '<leader>mm', '<cmd>BookmarksMark<cr>', { desc = 'Mark current line into active BookmarkList.' }),]]
+  --[[vim.keymap.set({ 'n' }, '<leader>mt', '<cmd>BookmarksGoto<cr>', { desc = 'Go to bookmark at current active BookmarkList' }),]]
+  --[[vim.keymap.set({ 'n' }, '<leader>mc', '<cmd>BookmarksCommands<cr>', { desc = 'Find and trigger a bookmark command.' }),]]
+  --[[vim.keymap.set({ 'n' }, '<leader>mr', '<cmd>BookmarksGotoRecent<cr>', { desc = 'Go to latest visited/created Bookmark' }),]]
+  --[[vim.keymap.set({ 'n' }, '<leader>ma', '<cmd>BookmarksCommands<cr> | <cmd>BookmarksGetAll<cr>', { desc = 'See all bookmarks' }),]]
+  --[[},]]
+  --[>  -<]- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
