@@ -115,7 +115,7 @@ vim.opt.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.opt.clipboard = 'unnamedplus'
-
+--vim.lsp.set_log_level 'debug'
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -299,16 +299,18 @@ require('lazy').setup({
       notify = false,
     },
     config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
+      require('which-key').setup {
+        show_help_message = false,
+      }
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-      }
+      --[[   require('which-key').add {]]
+      --[[['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },]]
+      --[[['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },]]
+      --[[['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },]]
+      --[[['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },]]
+      --[[['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },]]
+      --[[}]]
     end,
   },
 
@@ -921,6 +923,7 @@ require('lazy').setup({
   },
   --{ 'habamax/vim-godot', event = 'VimEnter' },
   { 'ryanoasis/vim-devicons', event = 'VimEnter' },
+  { 'sshklifov/debug', event = 'VimEnter' },
   { 'nvim-tree/nvim-web-devicons', event = 'VimEnter' },
   --[[{]]
   --[['preservim/nerdtree',]]

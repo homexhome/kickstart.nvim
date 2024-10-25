@@ -54,14 +54,46 @@ return {
       port = "${port}",
       executable = {
         -- CHANGE THIS to your path!
-        command = 'C:/Users/wired/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/adapter/codelldb.exe',
+        command = 'C:/Users/homex/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/adapter/codelldb.exe',
         args = {"--port", "${port}"},
     
         -- On windows you may have to uncomment this:
         detached = false,
       }
     }
-    dap.configurations.cpp = {
+  dap.adapters.cppdbg = {
+  id = 'cppdbg',
+  type = 'executable',
+  command = 'C:\\Users\\homex\\AppData\\Local\\nvim\\after\\ftplugin\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe',
+  options = {
+    detached = false
+  }
+}
+dap.configurations.cpp = {
+  {
+    name = "Launch file",
+    type = "cppdbg",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopAtEntry = true,
+  },
+  {
+    name = 'Attach to gdbserver :1234',
+    type = 'cppdbg',
+    request = 'launch',
+    MIMode = 'gdb',
+    miDebuggerServerAddress = 'localhost:1234',
+    miDebuggerPath = '/usr/bin/gdb',
+    cwd = '${workspaceFolder}',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+  },
+}
+    dap.configurations.rust = {
       {
         name = "Launch file",
         type = "codelldb",
@@ -71,9 +103,17 @@ return {
         end,
         cwd = '${workspaceFolder}',
         stopOnEntry = false,
+        setupCommands = {  
+          { 
+             text = '-enable-pretty-printing',
+             description =  'enable pretty printing',
+             ignoreFailures = false 
+          },
+        },
+        trace = true,
       },
     }
-    dap.configurations.rust = dap.configurations.cpp
+    -- dap.configurations.rust = dap.configurations.cpp
 
     dap.configurations.gdscript = {
       {
